@@ -145,7 +145,8 @@ class WalletController extends Controller
          $check_title =  $wallet->where("wallet_title",$request->wallet_title)
          ->where("user_id",$user_id)->first();
 
-        if($check_title){
+
+        if($check_title && $wallet->wallet_title != $request->wallet_title){
             return response()->json(["error" => "Ja tens uma carteira com este titulo"]);
         }
 
