@@ -213,7 +213,18 @@ class UserAuth extends Controller
         return response()->json(["success" => "Sucesso"]);
     }
 
-    public function update_profile_photo(Request $request){}
+    public function update_profile_photo(Request $request){
+        
+        if(strlen($request->file) < 3 ) {
+            return response()->json(['error' => 'Nome do ficheiro invalido']);
+        }
+
+        $photo = User::where('user_id',base64_decode(Crypt::decrypt($request->header('access_token'))))
+                        ->update(['user_profile' => $request->file]);
+  
+        return response()->json(['success' => 'Sucesso']);
+        
+    }
 
     public function user_update(UserBasicValidator $request, $id = 0){
 

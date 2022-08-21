@@ -19,7 +19,7 @@ IF NOT EXISTS tbl_user
     user_birthplace VARCHAR
 (50) NOT NULL,
     user_profile VARCHAR
-(20),
+(120),
     user_id VARCHAR
 (30) NOT NULL PRIMARY KEY,
     is_admin BOOLEAN DEFAULT 0,
