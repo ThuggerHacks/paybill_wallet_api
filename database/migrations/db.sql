@@ -29,7 +29,7 @@ IF NOT EXISTS tbl_user
 (300)  NOT NULL,
 pro_account INT DEFAULT 0,
 email_sent_code VARCHAR
-(6) DEFAULT NULL
+(15) DEFAULT NULL
     
 );
 
@@ -41,7 +41,7 @@ IF NOT EXISTS tbl_wallet
     wallet_title VARCHAR
 (20) NOT NULL,
     wallet_money DECIMAL DEFAULT 0,
-    wallet_activated_status BOOLEAN DEFAULT 1,
+    wallet_activated_status BOOLEAN DEFAULT 0,
     wallet_associated_phone_number VARCHAR
 (12) NOT NULL,
     wallet_created_at timestamp,

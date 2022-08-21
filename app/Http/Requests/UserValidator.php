@@ -49,7 +49,7 @@ class UserValidator extends FormRequest
             "user_password.max" => "A senha deve ter no maximo :max caracteres",
             "user_password.required" => "A senha eh obrigatorio",
             "user_password.regex" => "A senha deve ter: pelomenos uma letra maiuscula, uma minuscula, um numero e um simbolo especial",
-            "user_confirm_password.required" => "Por favorconfirme a senha",
+            "user_confirm_password.required" => "Por favor confirme a senha",
             "user_confirm_password.same" => "A senha nao pode ser diferente.",
             "user_phone_number.min" => "O numero deve ter no minimo :min caracteres.",
             "user_phone_number.max" => "O numero deve ter no maximo :max caracteres.",

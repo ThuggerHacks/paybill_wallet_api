@@ -24,15 +24,16 @@ class UserBasicValidator extends FormRequest
     public function rules()
     {
         return [
-            "user_name" => ["max:100", "min:3", "required"],
-            "user_email" => ["max:70", "min:5", "required","email","regex:/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/"],
-            "user_phone_number" => ["min:9","max:15","required","regex:/^(84|85|86|87|82|83)[0-9]{7}$/"]
+            "user_name" => ["max:100", "min:3", ],
+            "user_email" => ["max:70", "min:5", "email","regex:/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/"],
+            "user_phone_number" => ["min:9","max:15","regex:/^(84|85|86|87|82|83)[0-9]{7}$/"]
         ];
     }
 
     public function messages(){
 
         return [
+            "user_phone_number.regex" => "Numero invalido",
             "user_name.min" => "O nome deve ter no minimo :min caracteres",
             "user_name.max" => "O nome deve ter no maximo :max caracteres",
             "user_name.required" => "O nome eh obrigatorio.",
@@ -44,7 +45,6 @@ class UserBasicValidator extends FormRequest
             "user_phone_number.min" => "O numero deve ter no minimo :min caracteres.",
             "user_phone_number.max" => "O numero deve ter no maximo :max caracteres.",
             "user_phone_number.required" => "O numero deve ser preenchido.",
-            "user_phone_number.regex" => "Numero invalido",
         ];
     }
 }

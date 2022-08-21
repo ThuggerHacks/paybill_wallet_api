@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Http;
+
 use Illuminate\Http\Request;
 
 use App\Http\Requests\UserValidator;
 use App\Http\Requests\PasswordValidator;
 use App\Http\Requests\UserBasicValidator;
+use App\Http\Requests\EmailValidator;
 
 use App\Models\User;
 
@@ -20,6 +23,12 @@ class UserAuth extends Controller
     //
 
     public function index(UserValidator $request){
+
+        //verifying if his birthdate is valid
+
+        if($request->user_birthdate >= date('Y-m-d')){
+            return response()->json(['error' => 'Data de nascimento invalida']);
+        }
         
         //generating a custom user_id
 
@@ -85,7 +94,31 @@ class UserAuth extends Controller
         return response()->json(["token" => $token]);
     }
 
-    public function resetPassword($email){}
+    public function resetPassword(EmailValidator $request){
+        
+        //set the time to expire sent code
+        $expiration_date = time()+60;
+        //generate a random code
+        $code = rand(1000,9999);
+
+        //CONCAT the codewith its time so that we know when it expires and to send to database
+        $send_do_db =$expiration_date.'-'.$code;
+
+        //sending email verification
+        try{
+            $http = Http::post(config("constants.send_mail"),[
+                "subject" => "Codigo de Verificação",
+                "message" => 'Codigo: '.$code,
+                "email" => $request->email
+            ]);
+
+            return response()->json(["code" => $http]);
+        }catch( Exception $e){
+            return response()->json(["error" => 'Houve um erro']);
+        }
+
+
+    }
 
     public function verifyEmail($email){}
 
@@ -194,7 +227,7 @@ class UserAuth extends Controller
         //checking if he wants to updating his email
         if($user->user_email != $request->user_email){
             //verifying if the new email is not taken yet
-            $check_email = User::where("user_email",$request->user_email)->first();
+            $check_email = User::where("user_email",$request->user_email)->where("user_id","<>", $user_id)->first();
             //returning an error if the email is taken
             if($check_email){
                 return response()->json(["error" => "Alguem ja esta usando este email"]);
@@ -204,7 +237,7 @@ class UserAuth extends Controller
         //checking if he wants to update his mobile phone number
         if($user->user_phone_number != $request->user_phone_number_){
             //checking if the new mobile phone is available
-            $check_phone = User::where("user_phone_number",'258'.$request->user_phone_number)->first();
+            $check_phone = User::where("user_phone_number",'258'.$request->user_phone_number)->where("user_id","<>", $user_id)->first();
             //returning an error if the phone is taken yet
             if($check_phone){
                 return response()->json(["error" => "Alguem ja esta usando este numero"]);
@@ -212,11 +245,17 @@ class UserAuth extends Controller
         }
 
         //updating to the new data
+        if($request->user_email != $user->user_email){
+            $user->where("user_id",$user_id)->update(["user_email_verified" => false]);
+        }
+
         $user->where("user_id",$user_id)->update([
-            "user_name" => $request->user_name,
-            "user_email" => $request->user_email,
-            "user_phone_number" => '258'.$request->user_phone_number
+            "user_name" => $request->user_name ? $request->user_name : $user->user_name,
+            "user_email" => $request->user_email ? $request->user_email : $user->user_email ,
+            "user_phone_number" => $request->user_phone_number ? '258'.$request->user_phone_number : $user->user_phone_number
         ]);
+
+        
         //returning success message
         return response()->json(["success" => "Sucesso"]);
 

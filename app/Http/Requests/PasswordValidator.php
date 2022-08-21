@@ -37,7 +37,7 @@ class PasswordValidator extends FormRequest
             "user_new_password.max" => "A senha deve ter no maximo :max caracteres",
             "user_new_password.required" => "A senha eh obrigatorio",
             "user_new_password.regex" => "A senha deve ter: pelomenos uma letra maiuscula, uma minuscula, um numero e um simbolo especial",
-            "user_confirm_new_password.required" => "Por favorconfirme a senha",
+            "user_confirm_new_password.required" => "Por favor confirme a senha",
             "user_confirm_new_password.same" => "A senha nao pode ser diferente.",
         ];
     }

@@ -8,11 +8,13 @@ Route::post("/user/auth/sign-up",[UserAuth::class,"index"]);
 
 Route::post("/user/auth/sign-in", [UserAuth::class,"signIn"]);
 
+Route::post("/user/forgot/password", [UserAuth::class,"resetPassword"]);
+
 Route::post("/logout",[UserAuth::class,"logout"])->middleware("api_auth","email_verification");
 
 Route::get("/user/all", [UserAuth::class,"users"])->middleware("api_auth","email_verification","is_admin");
 
-Route::get("/user/profile", [UserAuth::class,"user_me"])->middleware("api_auth","email_verification");
+Route::get("/user/profile", [UserAuth::class,"user_me"])->middleware("api_auth");
 
 Route::get("/user/{id?}", [UserAuth::class,"user"])->middleware("api_auth","email_verification","is_admin");
 

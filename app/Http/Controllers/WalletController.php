@@ -55,10 +55,28 @@ class WalletController extends Controller
             "wallet_id" => $new_wallet_id
         ]);
 
+        $this->wallet_activate($request,$new_wallet_id);
         //return wallet details after criation
-        return response()->json(["wallet_id" => $new_wallet_id, "wallet_associated_phone_number" => '258'.$request->wallet_associated_phone_number]);
+        return response()->json(["success" => "Carteira criada com sucesso"]);
         
      
+    }
+
+    public function wallet_activate(Request $request,$id){
+
+        //getting all wallets
+        $my_wallets = Wallet::where("user_id",base64_decode(Crypt::decrypt($request->header("access_token"))))->get();
+
+
+        foreach($my_wallets as $wallet){
+            if($wallet->wallet_id != $id){
+                //deactivating all wallets that were not selected
+                $wallet->update(["wallet_activated_status" => false]);
+            }else{
+                //activating the selected wallet
+                $wallet->update(["wallet_activated_status" => true]);
+            }
+        }
     }
 
     public function wallet_all() {
@@ -109,7 +127,7 @@ class WalletController extends Controller
         }else if( strlen($request->wallet_title) < 3 ) {
             return response()->json(["error" => "Titulo deve ter pelomenos 3 digitos"]);
         }else if( strlen($request->wallet_title) > 20){
-            return response()->json(["error" => "Titulo deve ter ate 20 digitos"]);
+            return response()->json(["error" => "Titulo deve ter ate 20 caracteres"]);
         }
 
         //decrypting user token to get id
@@ -133,7 +151,7 @@ class WalletController extends Controller
 
         $wallet->update(["wallet_title" => $request->wallet_title]);
 
-        return $wallet;
+        return response()->json(['success' => 'Atualizado com sucesso']);
     }
 
     public function update_associated_phone_number(PhoneValidator $request,$id = 0){
@@ -147,13 +165,13 @@ class WalletController extends Controller
                                 ->first();
         
         if(!$update_phone){
-            return response()->json(["message" => "Houve um erro"]);
+            return response()->json(["error" => "Houve um erro"]);
         }
 
-        //check if he is updating for a new number or not
-        if('258'.$phone == $update_phone->wallet_associated_phone_number){
-            return response()->json(["error" => "Impossivel atualizar para o mesmo numero em uso"]);
-        }
+        // //check if he is updating for a new number or not
+        // if('258'.$phone == $update_phone->wallet_associated_phone_number){
+        //     return response()->json(["error" => "Impossivel atualizar para o mesmo numero em uso"]);
+        // }
 
         //updating
         $update_phone->update(["wallet_associated_phone_number" => '258'.$phone]);

@@ -26,6 +26,10 @@ class CashoutController extends Controller
                 "thirdparty_ref" => "11114"
             ]);
 
+            if(isset($response['error'])){
+                return false;
+            }
+
             //checking if the transaction was successfully done.
             $check_transation = $response['output_ResponseDesc'] == "Request processed successfully"?true:false;
 
