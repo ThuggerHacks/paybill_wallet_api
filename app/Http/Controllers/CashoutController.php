@@ -120,12 +120,16 @@ class CashoutController extends Controller
 
         $cashouts = WithDraw::where("withdraw_wallet_id",$wallet_id)
                                 ->orderBy("withdraw_at","desc")
-                                ->paginate(1);
+                                ->paginate(10);
+
+        $wallet = Wallet::where("wallet_id",$wallet_id)
+                            ->first();
+
         if(!$cashouts){
             return response()->json(["message" => "Vazio"]);
         }
 
-        return $cashouts;
+        return ["wallet" => $wallet, "withdraws" => $cashouts];
     }
 
     public function cash_update($id = 0) {}

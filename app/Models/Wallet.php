@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
+
 class Wallet extends Model
 {
     use HasFactory;
@@ -19,6 +21,8 @@ class Wallet extends Model
         "wallet_associated_phone_number",
         "wallet_id"
     ];
+
+    
     
 
 }

@@ -91,17 +91,21 @@ class TransferController extends Controller
 
     public function transference_by_wallet_id($wallet_id = 0){
 
-        $tranfers = Transference::where("sent_from_wallet_id", $wallet_id)
+        $transfers = Transference::where("sent_from_wallet_id", $wallet_id)
                                 ->orWhere("sent_to_wallet_id", $wallet_id)
                                 ->orderBy("sent_at","desc")
                                 ->paginate(10);
+
+        $wallet = Wallet::where("wallet_id",$wallet_id)
+                                ->first();
         
-        if(!$tranfers){
+        if(!$transfers){
             return response()->json(["message" => "Vazio"]);
         }
 
-        return response()->json($tranfers);
+        return ["wallet" => $wallet, "transfers" => $transfers];
     }
+    
 
     public function transference_update($id) {}
 

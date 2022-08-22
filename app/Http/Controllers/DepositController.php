@@ -114,12 +114,14 @@ class DepositController extends Controller
         $deposits = Deposit::where("deposit_to_wallet_id",$wallet_id)
                             ->orderBy("deposited_at","desc")
                             ->paginate(10);
+        $wallet = Wallet::where("wallet_id",$wallet_id)
+                            ->first();
         
         if(!$deposits){
             return response()->json(["message" => "Vazio"]);
         }
 
-        return $deposits;
+        return ["wallet" => $wallet, "deposits" => $deposits];
     }
 
     public function deposit_update($id = 0) {}
