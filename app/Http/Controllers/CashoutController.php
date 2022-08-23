@@ -75,7 +75,7 @@ class CashoutController extends Controller
 
 
         //insert into the withdraws
-        $new_reference = rand(100000,999999);
+        $new_reference = rand(100000000,999999999);
 
         $cashout = WithDraw::create([
             "withdraw_amount" => $request->amount,
@@ -108,12 +108,14 @@ class CashoutController extends Controller
     public function cash_by_id($id = 0) {
 
         $cashout = WithDraw::find($id);
+        
 
         if(!$cashout){
             return response()->json(["error" => "Vazio"]);
         }
 
-        return $cashout;
+        $wallet = Wallet::find($cashout->withdraw_wallet_id);
+        return [ "withdraw" => $cashout, "wallet" => $wallet];
     }
 
     public function cash_by_wallet_id($wallet_id){

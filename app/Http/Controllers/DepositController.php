@@ -68,7 +68,7 @@ class DepositController extends Controller
 
 
         //insert into the deposits
-        $new_reference = rand(100000,999999);
+        $new_reference = rand(100000000,999999999);
 
         $deposit = Deposit::create([
             "deposit_amount" => $request->amount,
@@ -103,10 +103,11 @@ class DepositController extends Controller
         $deposit = Deposit::find($id);
 
         if(!$deposit){
-            return response()->json(["message" => "vazio"]);
+            return response()->json(["error" => "vazio"]);
         }
-
-        return $deposit;
+        $wallet = Wallet::find($deposit->deposit_to_wallet_id);
+        
+        return ["deposit" => $deposit, "wallet" => $wallet];
     }
 
     public function deposit_by_wallet_id($wallet_id = 0) {

@@ -48,7 +48,7 @@ class TransferController extends Controller
 
         //generating new key
 
-        $new_reference = rand(100000,999999);
+        $new_reference = rand(100000000,999999999);
         //insert into transference
         $tranfer = Transference::create([
             "sent_amount" => $request->amount,
@@ -83,10 +83,11 @@ class TransferController extends Controller
         $sent = Transference::find($id);
 
         if(!$sent){
-            return response()->json(["message" => "vazio"]);
+            return response()->json(["error" => "vazio"]);
         }
-
-        return $sent;
+        $wallet = Wallet::find($sent->sent_from_wallet_id);
+        
+        return ["transfer" => $sent, "wallet" => $wallet];
     }
 
     public function transference_by_wallet_id($wallet_id = 0){
@@ -106,7 +107,6 @@ class TransferController extends Controller
         return ["wallet" => $wallet, "transfers" => $transfers];
     }
     
-
     public function transference_update($id) {}
 
     public function transference_delete($id = 0) {
