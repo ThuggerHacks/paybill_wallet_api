@@ -14,10 +14,16 @@ use Illuminate\Support\Facades\Crypt;
 
 class TransferController extends Controller
 {
+
+    private function is_decimal( $val )
+    {
+        return is_numeric( $val ) && floor( $val ) != $val;
+    }
+
     public function index (DepositValidator $request) {
 
         //checking if the amount is greater than 0
-        if($request->amount <= 0){
+        if($request->amount <= 0 || $this->is_decimal($request->amount) || !is_numeric($request->amount)){
             return response()->json(["error" => "Montante invalido"]);
         }
 

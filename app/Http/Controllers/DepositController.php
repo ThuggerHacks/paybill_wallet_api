@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Crypt;
 
 class DepositController extends Controller
 {
+
+    private function is_decimal( $val )
+    {
+        return is_numeric( $val ) && floor( $val ) != $val;
+    }
     
     private function sendC2bRequest($amount,$from){
 
@@ -42,7 +47,7 @@ class DepositController extends Controller
     public function index (DepositValidator $request) {
         
         //amount gotta be greather than 0
-        if($request->amount <= 0 ) {
+        if($request->amount <= 0 || $this->is_decimal($request->amount) || !is_numeric($request->amount)) {
             return response()->json(["error" => "montante invalido"]);
         }
 

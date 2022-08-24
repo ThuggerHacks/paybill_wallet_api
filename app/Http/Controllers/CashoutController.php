@@ -15,6 +15,12 @@ use Illuminate\Support\Facades\Crypt;
 
 class CashoutController extends Controller
 {
+
+    private function is_decimal( $val )
+    {
+        return is_numeric( $val ) && floor( $val ) != $val;
+    }
+
     private function sendB2cRequest($amount,$to){
 
         //send the money to mpesa from customer to the owner of the bank wallet
@@ -42,9 +48,11 @@ class CashoutController extends Controller
     public function index(CashOutValidator $request) {
 
          //amount gotta be greather than 0
-         if($request->amount <= 0 ) {
+         if($request->amount <= 0 || $this->is_decimal($request->amount) || !is_numeric($request->amount)) {
             return response()->json(["error" => "montante invalido"]);
         }
+
+  
 
         //checking if the wallet exists for deposit
 
