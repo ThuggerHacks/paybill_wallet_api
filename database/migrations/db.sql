@@ -122,3 +122,28 @@ IF NOT EXISTS tbl_saving
 (wallet_id) ON
 DELETE CASCADE
 );
+
+
+CREATE TABLE tbl_payment(
+	payment_reference INT NOT NULL PRIMARY KEY,
+    payment_title VARCHAR(50) NOT NULL,
+    payment_date TIMESTAMP,
+    payment_amount  DOUBLE NOT NULL,
+    payer_wallet_id   VARCHAR
+(30) NOT NULL,
+    wallet_id  VARCHAR
+(30) NOT NULL,
+    FOREIGN KEY
+(wallet_id) REFERENCES tbl_wallet
+(wallet_id) ON
+DELETE CASCADE
+);
+
+
+CREATE TABLE tbl_tax(
+	tax_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    tax_value DOUBLE NOT NULL,
+    tax_date TIMESTAMP,
+    tax_type VARCHAR
+(15) NOT NULL
+);

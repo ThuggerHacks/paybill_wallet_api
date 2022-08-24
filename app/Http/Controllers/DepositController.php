@@ -15,8 +15,7 @@ use Illuminate\Support\Facades\Crypt;
 class DepositController extends Controller
 {
 
-    private function is_decimal( $val )
-    {
+    private function is_decimal( $val ){
         return is_numeric( $val ) && floor( $val ) != $val;
     }
     

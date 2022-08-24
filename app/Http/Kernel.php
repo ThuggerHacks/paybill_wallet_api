@@ -67,5 +67,6 @@ class Kernel extends HttpKernel
         "api_auth" =>    \App\Http\Middleware\AuthMiddleware::class,
         "email_verification" => \App\Http\Middleware\EmailMiddleware::class,
         "is_admin" => \App\Http\Middleware\AdminAuth::class,
+        "login.guard" => \App\Http\Middleware\LoginGuard::class,
     ];
 }
