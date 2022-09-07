@@ -147,3 +147,13 @@ CREATE TABLE tbl_tax(
     tax_type VARCHAR
 (15) NOT NULL
 );
+
+
+CREATE TABLE pricing
+(
+    pricing_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    pricing_title VARCHAR
+(50) NOT NULL,
+    pricing_amount DECIMAL NOT NULL,
+    accounts_number INT NOT NULL
+);
