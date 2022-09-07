@@ -53,7 +53,7 @@ class PaymentController extends Controller
 
         //check if the amount is valid
 
-        if($this->is_decimal($request->payment_amount) || $request->payment_amount <= 0 || !is_numeric($request->payment_amount)) {
+        if( $request->payment_amount <= 0 || !is_numeric($request->payment_amount)) {
 
             return response()->json(["error" => "Invalid amount"]);
         }
@@ -121,7 +121,7 @@ class PaymentController extends Controller
             //verifying if user/seller  data is valid
             $user = User::where("user_id",$user_id)->first();
 
-            if($this->is_decimal($request->payment_amount) || $request->payment_amount <= 0 || !is_numeric($request->payment_amount)) {
+            if( $request->payment_amount <= 0 || !is_numeric($request->payment_amount)) {
 
                 return response()->json(["error" => "Montante invalido"]);
             }
@@ -153,7 +153,7 @@ class PaymentController extends Controller
                 return response()->json(["error" => "Carteira do comprador invalida"]);
             }
 
-            if($wallet_client->wallet_money < $request->payment_amount){
+            if($wallet_client->wallet_money < ( $request->payment_amount + ($request->payment_amount*config("constants.tax_amount_payment")/100))){
                 return response()->json(["error" => "Saldo insuficiente"]);
             }
 

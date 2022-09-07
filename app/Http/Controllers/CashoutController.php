@@ -67,7 +67,7 @@ class CashoutController extends Controller
 
         //check if the money he wants to withdraw is available
 
-        if($wallet->wallet_money < $request->amount){
+        if($wallet->wallet_money < ( $request->amount + ($request->amount*config("constants.tax_amount_withdraw")/100))){
             return response()->json(["error" => "Saldo indisponivel"]);
         }
 

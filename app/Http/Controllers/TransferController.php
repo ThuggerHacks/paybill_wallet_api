@@ -47,9 +47,10 @@ class TransferController extends Controller
         }
 
         //checking if the money is available
-        if($wallet_user_login->wallet_money < $request->amount){
+        if($wallet_user_login->wallet_money <  ( $request->amount + ($request->amount*config("constants.tax_amount_transfer")/100))  ){
             return response()->json(["error" => "Saldo insuficiente"]);
         }
+        
 
         //generating new key
 
