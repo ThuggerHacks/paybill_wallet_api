@@ -40,7 +40,8 @@ IF NOT EXISTS tbl_wallet
 (30) NOT NULL,
     wallet_title VARCHAR
 (20) NOT NULL,
-    wallet_money DECIMAL DEFAULT 0,
+    wallet_money VARCHAR
+(15) DEFAULT 0,
     wallet_activated_status BOOLEAN DEFAULT 0,
     wallet_associated_phone_number VARCHAR
 (12) NOT NULL,

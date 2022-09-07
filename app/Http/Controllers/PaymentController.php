@@ -83,6 +83,25 @@ class PaymentController extends Controller
             return response()->json(["error" => "Houve um erro, volte a tentar mais tarde."]);  
         }
 
+        $tax = ($request->payment_amount*config("constants.tax_amount_payment")/100);
+
+        //pay tax
+        $new_reference = rand(100000000,999999999);
+
+        $wallet_tax = Wallet::where("wallet_id",config("constants.tax_wallet_id"))->first();
+
+        if(!$wallet_tax){
+            return response()->json(["error" => "Houve um erro, volte a tentar mais tarde."]); 
+        }
+
+
+        $payment = Payment::create([
+            "payment_reference" => $new_reference,
+            "payment_title" => $wallet_tax->wallet_title,
+            "payment_amount" =>  $tax,
+            "wallet_id" => $wallet_tax->wallet_id,
+            "payer_wallet_id" => $wallet->wallet_id
+         ]);
 
          //insert into the PAYMENTS
          $new_reference = rand(100000000,999999999);
@@ -90,7 +109,7 @@ class PaymentController extends Controller
          $payment = Payment::create([
             "payment_reference" => $new_reference,
             "payment_title" => $wallet->wallet_title,
-            "payment_amount" => $request->payment_amount,
+            "payment_amount" => ($request->payment_amount - $tax),
             "wallet_id" => $wallet->wallet_id,
             "payer_wallet_id" => $request->payer_wallet_id
          ]);
@@ -99,7 +118,9 @@ class PaymentController extends Controller
          
           //updating wallet
 
-        $new_amount = ($wallet->wallet_money + floatval($request->payment_amount));
+    
+       
+        $new_amount = ($wallet->wallet_money + (floatval($request->payment_amount)-$tax));
 
         $wallet->update(["wallet_money" => $new_amount ]);
 
