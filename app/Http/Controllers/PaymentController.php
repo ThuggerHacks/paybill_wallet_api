@@ -208,9 +208,9 @@ class PaymentController extends Controller
             return response()->json(["error" => "Carteira nao existe"]);
         }
 
-        $payment = Payment::where("payer_wallet_id",$wallet_id)->orderBy("payment_date","desc")->paginate(10);
+        $payment = Payment::where("payer_wallet_id",$wallet_id)->orWhere("wallet_id",$wallet_id)->orderBy("payment_date","desc")->paginate(10);
 
-        return ["data" => $payment];
+        return ["wallet" => $wallet,"payments" => $payment];
 
 
     }
@@ -222,8 +222,8 @@ class PaymentController extends Controller
         if(!$payment){
             return response()->json(["error" => "Pagamento nao existe"]);
         }
-
-        return $payment;
+        $wallet = Wallet::where("wallet_id",$payment->wallet_id)->first();
+        return ["payments" => $payment, "wallet" => $wallet];
     }
 
     public function get_payments(){

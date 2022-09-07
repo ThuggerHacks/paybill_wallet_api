@@ -11,7 +11,7 @@ Route::post("/paybill/payment/wallet/{wallet_id?}",[PaymentController::class,"pa
 
 Route::get("/payments",[PaymentController::class,"get_payments"])->middleware("api_auth","email_verification","is_admin");
 
-Route::get("/payments/{wallet_id?}",[PaymentController::class,"get_payment_by_wallet_id"])->middleware("api_auth","email_verification");
+Route::get("/payments/wallet/{wallet_id?}",[PaymentController::class,"get_payment_by_wallet_id"])->middleware("api_auth","email_verification");
 
 Route::get("/payment/{wallet_id?}",[PaymentController::class,"get_payment_by_id"])->middleware("api_auth","email_verification");
 
