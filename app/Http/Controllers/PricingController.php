@@ -70,9 +70,9 @@ class PricingController extends Controller
         return ["success" => "Cartao atualizado com sucesso"];
     }
 
-    public function upgradeAccount(Request $request, $wallet_id = 0, $card_id = 0){
+    public function upgradeAccount(Request $request){
 
-        $wallet = Wallet::where("wallet_id",$wallet_id)->first();
+        $wallet = Wallet::where("wallet_id",$request->wallet_id)->first();
 
         //checking if the wallet exist
         if(!$wallet){
@@ -80,7 +80,7 @@ class PricingController extends Controller
         }
 
         //checking if the card exists
-        $card = Pricing::find($card_id);
+        $card = Pricing::find($request->card_id);
 
         if(!$card){
             return ["error" => "Pacote invalido"];
@@ -103,5 +103,16 @@ class PricingController extends Controller
 
        return ["success" => "Atualizado com sucesso, agora podes ter ate: ".($userData->pro_account + $card->accounts_number)." contas" ];
 
+    }
+
+    public function cardById($id = 0){
+
+        $card = Pricing::find($id);
+
+        if(!$card){
+            return ["error" => "O cartao nao existe"];
+        }
+
+        return ["data" => $card];
     }
 }
