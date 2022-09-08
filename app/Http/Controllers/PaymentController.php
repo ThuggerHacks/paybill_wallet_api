@@ -97,7 +97,7 @@ class PaymentController extends Controller
 
         $payment = Payment::create([
             "payment_reference" => $new_reference,
-            "payment_title" => $wallet_tax->wallet_title,
+            "payment_title" => $request->title != null? $request->title:$wallet_tax->wallet_title,
             "payment_amount" =>  $tax,
             "wallet_id" => $wallet_tax->wallet_id,
             "payer_wallet_id" => $wallet->wallet_id
@@ -108,7 +108,7 @@ class PaymentController extends Controller
 
          $payment = Payment::create([
             "payment_reference" => $new_reference,
-            "payment_title" => $wallet->wallet_title,
+            "payment_title" => $request->title != null? $request->title:$wallet_tax->wallet_title,
             "payment_amount" => ($request->payment_amount - $tax),
             "wallet_id" => $wallet->wallet_id,
             "payer_wallet_id" => $request->payer_wallet_id
@@ -185,7 +185,7 @@ class PaymentController extends Controller
 
                 $payment = Payment::create([
                 "payment_reference" => $new_reference,
-                "payment_title" => $wallet->wallet_title,
+                "payment_title" => $request->title != null? $request->title:$wallet->wallet_title,
                 "payment_amount" => $request->payment_amount,
                 "wallet_id" => $wallet->wallet_id,
                 "payer_wallet_id" => $request->payer_wallet_id
